@@ -2,6 +2,7 @@ import { IService } from '../interfaces/IService';
 import { ICar, CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
 import { ErrorTypes } from '../errors/catalog';
+import 'express-async-errors';
 
 export default class CarService implements IService<ICar> {
   private _car:IModel<ICar>;
