@@ -49,6 +49,6 @@ export default class CarController {
   ) {
     const result = await this._service.delete(req.params.id);
     if (!result) throw new Error();
-    return res.status(200).json(result);
+    return res.status(204).json(result);
   }
 }

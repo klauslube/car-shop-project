@@ -9,14 +9,14 @@ const errorHandler: ErrorRequestHandler = (
   _next,
 ) => {
   if (err instanceof ZodError) { 
-    return res.status(400).json({ message: err.issues });
+    return res.status(400).json({ error: err.issues });
   }
   const messageAsErrorType = err.message as keyof typeof ErrorTypes;
 
   const mappedError = errorCatalog[messageAsErrorType];
   if (mappedError) {
-    const { httpStatus, message } = mappedError;
-    return res.status(httpStatus).json({ message });
+    const { httpStatus, error } = mappedError;
+    return res.status(httpStatus).json({ error });
   }
   console.error(err);
   return res.status(500).json({ message: 'internal error' });
