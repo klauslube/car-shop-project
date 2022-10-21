@@ -9,7 +9,7 @@ export default class CarController {
     req: Request,
     res: Response<ICar>,
   ) {
-    const { model, year, color, buyValue, doorsQty, seatsQty } = req.body;
+    const { model, year, color, buyValue, doorsQty, seatsQty } = req.body;    
     const car = { model, year, color, buyValue, doorsQty, seatsQty };
     const result = await this._service.create(car);
     return res.status(201).json(result);
