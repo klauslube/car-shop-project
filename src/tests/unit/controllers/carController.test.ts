@@ -55,5 +55,15 @@ describe("Car Controller", () => {
       expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(carMock)).to.be.true;
     });
+
+    it("On Failure", async () => {
+      sinon.stub(carService, "readOne").resolves(carMock);
+      
+      req.params = { id: '1' };
+      await carController.readOne(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(400))
+      expect((res.json as sinon.SinonStub).calledWith('Id must have 24 hexadecimal characters'))
+    })
   });
 });
