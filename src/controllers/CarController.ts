@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { IService } from '../interfaces/IService';
 import { ICar } from '../interfaces/ICar';
+import { ErrorTypes } from '../errors/catalog';
 
 export default class CarController {
   constructor(private _service: IService<ICar>) { }
@@ -20,7 +21,7 @@ export default class CarController {
     res: Response<ICar>,
   ) {
     const result = await this._service.readOne(req.params.id);
-    if (!result) throw new Error();
+    if (!result) throw new Error(ErrorTypes.InvalidMongoId);
     return res.status(200).json(result);
   }
 

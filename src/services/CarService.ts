@@ -20,7 +20,7 @@ export default class CarService implements IService<ICar> {
     return this._car.create(parsed.data);
   }
 
-  public async readOne(_id:string):Promise<ICar> {
+  public async readOne(_id:string):Promise<ICar | null> {
     const car = await this._car.readOne(_id);
     if (!car) throw new Error(ErrorTypes.EntityNotFound);
     return car;
@@ -32,7 +32,7 @@ export default class CarService implements IService<ICar> {
     return car;
   }
 
-  public async update(_id:string, obj:unknown):Promise<ICar> {
+  public async update(_id:string, obj:unknown):Promise<ICar | null> {
     const parsed = CarZodSchema.safeParse(obj);
     if (!parsed.success) {
       throw parsed.error;
@@ -42,7 +42,7 @@ export default class CarService implements IService<ICar> {
     return car;
   }
 
-  public async delete(_id:string):Promise<ICar> {
+  public async delete(_id:string):Promise<ICar | null> {
     const deletedCar = await this._car.delete(_id);
     if (!deletedCar) throw new Error(ErrorTypes.EntityNotFound);
     return deletedCar;
