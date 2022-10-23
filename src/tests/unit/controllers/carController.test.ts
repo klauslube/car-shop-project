@@ -1,18 +1,18 @@
-import * as sinon from 'sinon';
-import chai from 'chai';
+import * as sinon from "sinon";
+import chai from "chai";
 const { expect } = chai;
-import CarModel from '../../../models/CarModel'
-import CarService from '../../../services/CarService';
-import CarController from '../../../controllers/CarController';
-import { carMockWithId, carMock } from '../../mock/carMock';
-import { NextFunction, Request, Response } from 'express';
+import CarModel from "../../../models/CarModel";
+import CarService from "../../../services/CarService";
+import CarController from "../../../controllers/CarController";
+import { carMockWithId, carMock, carArrayMock } from "../../mock/carMock";
+import { NextFunction, Request, Response } from "express";
 
-describe('Car Controller', () => {
-  const carModel = new CarModel()
+describe("Car Controller", () => {
+  const carModel = new CarModel();
   const carService = new CarService(carModel);
   const carController = new CarController(carService);
 
-  const req = {} as Request; 
+  const req = {} as Request;
   const res = {} as Response;
 
   beforeEach(() => {
@@ -21,15 +21,38 @@ describe('Car Controller', () => {
   });
 
   afterEach(() => {
-    sinon.restore()
-  })
+    sinon.restore();
+  });
 
-  describe('Create new Car', () => {
-    it('Success', async () => {
-      sinon.stub(carService, 'create').resolves(carMock);
+  describe("Create new Car", () => {
+    it("On Success", async () => {
+      sinon.stub(carService, "create").resolves(carMock);
       req.body = carMock;
       await carController.create(req, res);
       expect((res.status as sinon.SinonStub).calledWith(201)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carMock)).to.be.true;
+    });
+  });
+
+  describe("Search all Cars", () => {
+    it("On Success", async () => {
+      sinon.stub(carService, "read").resolves(carArrayMock);
+
+      await carController.read(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carArrayMock)).to.be.true;
+    });
+  });
+  
+  describe("Search a Car ", () => {
+    it("On Success", async () => {
+      sinon.stub(carService, "readOne").resolves(carMock);
+
+      req.params = { id: carMockWithId._id };
+      await carController.readOne(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(carMock)).to.be.true;
     });
   });
