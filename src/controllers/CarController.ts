@@ -40,6 +40,7 @@ export default class CarController {
     const { model, year, color, buyValue, doorsQty, seatsQty } = req.body;
     const car = { model, year, color, buyValue, doorsQty, seatsQty };
     const result = await this._service.update(req.params.id, car);
+
     if (!result) throw new Error();
     return res.status(200).json(result);
   }
@@ -49,7 +50,7 @@ export default class CarController {
     res: Response<ICar>,
   ) {
     const result = await this._service.delete(req.params.id);
-    if (!result) throw new Error();
+    if (!result) throw new Error(ErrorTypes.InvalidMongoId);
     return res.status(204).json(result);
   }
 }
