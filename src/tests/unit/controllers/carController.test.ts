@@ -4,7 +4,7 @@ const { expect } = chai;
 import CarModel from "../../../models/CarModel";
 import CarService from "../../../services/CarService";
 import CarController from "../../../controllers/CarController";
-import { carMockWithId, carMock, carArrayMock } from "../../mock/carMock";
+import { carMockWithId, carMock, carArrayMock, carMockChangeWithId, carMockChange } from "../../mock/carMock";
 import { NextFunction, Request, Response } from "express";
 
 describe("Car Controller", () => {
@@ -59,11 +59,34 @@ describe("Car Controller", () => {
     it("On Failure", async () => {
       sinon.stub(carService, "readOne").resolves(carMock);
       
-      req.params = { id: '1' };
+      req.params = { id: '123Errado' };
       await carController.readOne(req, res);
 
       expect((res.status as sinon.SinonStub).calledWith(400))
       expect((res.json as sinon.SinonStub).calledWith('Id must have 24 hexadecimal characters'))
     })
   });
+
+  describe("Update a Car", () => {
+    it("On Success", async () => {
+      sinon.stub(carService, "update").resolves(carMockChangeWithId);
+
+      req.params = { id: carMockWithId._id };
+      await carController.update(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carMockChangeWithId)).to.be.true;
+    });
+  })
+
+  describe("Delete a Car", () => {
+    it("On Success", async () => {
+      sinon.stub(carService, "delete").resolves(carMockWithId);
+
+      req.params = { id: carMockWithId._id };
+      await carController.delete(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
+    });
+  })
 });
