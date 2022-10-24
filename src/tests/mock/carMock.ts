@@ -57,4 +57,17 @@ const carMockChangeWithId: ICar & { _id:string } = {
   doorsQty: 4
 }
 
-export { carMock, carMockWithId, carArrayMock, carMockChange, carMockChangeWithId };
+const carMockWrong: ICar = {
+  model: "Ferrari Maranello",
+  year: 1963,
+  color: "red",
+  buyValue: 3500000,
+  seatsQty: 4,
+  doorsQty: 1
+};
+
+const carMockPartial: Partial<ICar> = {
+	model: 'fusca',
+};
+
+export { carMock, carMockWithId, carArrayMock, carMockChange, carMockChangeWithId, carMockPartial, carMockWrong };

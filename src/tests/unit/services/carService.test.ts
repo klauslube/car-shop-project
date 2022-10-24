@@ -4,7 +4,7 @@ const { expect } = chai;
 import { ZodError } from "zod";
 import CarModel from "../../../models/CarModel";
 import CarService from "../../../services/CarService";
-import { carMockWithId, carMock, carArrayMock } from "../../mock/carMock";
+import { carMockWithId, carMock, carArrayMock, carMockWrong, carMockPartial } from "../../mock/carMock";
 import {ErrorTypes} from '../../../errors/catalog'
 
 describe("Car Service", () => {
@@ -16,7 +16,11 @@ describe("Car Service", () => {
     sinon.stub(carModel, "read").resolves(carArrayMock);
 		sinon.stub(carModel, 'readOne')
 		.onCall(0).resolves(carMockWithId) 
-		.onCall(1).resolves(null); 
+		.onCall(1).resolves(null);
+    sinon.stub(carModel, 'update')
+		.onCall(0).resolves(carMockWithId) 
+		.onCall(1).resolves(null)
+    .onCall(2).resolves(carMockWithId);
   });
 
   after(() => {
@@ -69,4 +73,35 @@ describe("Car Service", () => {
     });
   });
 
-});
+  describe('Update a Car', () => {
+		it('On Success', async () => {
+			const carUpdated = await carService.update('62cf1fc6498565d94eba52cd', carMock);
+			expect(carUpdated).to.be.deep.equal(carMockWithId);
+		});
+
+		it('Failure: entity not found', async () => {
+			let errorToTest;
+			try {
+				await carService.update(carMockWithId._id, carMock)
+			} catch (error: any) {
+				errorToTest = error;
+			}
+			expect(errorToTest.message).to.be.equal(ErrorTypes.EntityNotFound);
+		});
+
+		it('Failure: entity is not valid', async () => {
+			let errorToTest;
+			try {
+				await carService.update(carMockWithId._id, carMockWrong)
+			} catch (error: any) {
+				errorToTest = error;
+			}
+			expect(errorToTest).to.be.instanceOf(ZodError);
+		});
+
+		// it('Success: deve ser possível atualizar apenas alguns atributos', async () => {
+		// 	const carUpdated = await carService.update('62cf1fc6498565d94eba52cd', carMockPartial);
+		// 	expect(carUpdated).to.be.deep.equal(carMockWithId);
+		// });
+  })
+})
