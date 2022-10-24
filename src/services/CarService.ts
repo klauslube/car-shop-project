@@ -37,7 +37,6 @@ export default class CarService implements IService<ICar> {
     if (!parsed.success) {
       throw parsed.error;
     }
-    console.log('parsed', parsed);
     
     const car = await this._car.update(_id, parsed.data);
     console.log('service', car);
