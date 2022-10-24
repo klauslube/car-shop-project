@@ -90,6 +90,7 @@ describe("Car Service", () => {
 				errorToTest = error;
 			}
 			expect(errorToTest.message).to.be.equal(ErrorTypes.EntityNotFound);
+      
 		});
 
 		it('Failure: entity is not valid', async () => {
@@ -122,6 +123,7 @@ describe("Car Service", () => {
 				errorToTest = error;
 			}
 			expect(errorToTest.message).to.be.equal(ErrorTypes.EntityNotFound);
+      // expect(errorToTest.)
 		});
   })
 })

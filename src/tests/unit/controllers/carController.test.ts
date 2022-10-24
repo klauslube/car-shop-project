@@ -6,6 +6,7 @@ import CarService from "../../../services/CarService";
 import CarController from "../../../controllers/CarController";
 import { carMockWithId, carMock, carArrayMock, carMockChangeWithId, carMockChange } from "../../mock/carMock";
 import { NextFunction, Request, Response } from "express";
+import { ErrorTypes } from "../../../errors/catalog";
 
 describe("Car Controller", () => {
   const carModel = new CarModel();
@@ -56,15 +57,6 @@ describe("Car Controller", () => {
       expect((res.json as sinon.SinonStub).calledWith(carMock)).to.be.true;
     });
 
-    it("On Failure", async () => {
-      sinon.stub(carService, "readOne").resolves(carMock);
-      
-      req.params = { id: '123Errado' };
-      await carController.readOne(req, res);
-
-      expect((res.status as sinon.SinonStub).calledWith(400))
-      expect((res.json as sinon.SinonStub).calledWith('Id must have 24 hexadecimal characters'))
-    })
   });
 
   describe("Update a Car", () => {
