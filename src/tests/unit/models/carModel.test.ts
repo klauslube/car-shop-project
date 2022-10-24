@@ -4,14 +4,14 @@ const { expect } = chai;
 import CarModel from '../../../models/CarModel'
 import { Model } from 'mongoose';
 import { ICar } from '../../../interfaces/ICar';
-import { carArrayMock, carMock, carMockWithId } from '../../mock/carMock';
+import { carArrayMock, carMock, carMockChange, carMockChangeWithId, carMockWithId } from '../../mock/carMock';
 describe('Car Model', () => {
   const carModel = new CarModel()
   before(async () => {
     sinon.stub(Model, 'create').resolves(carMockWithId)
     sinon.stub(Model, 'find').resolves(carArrayMock)
     sinon.stub(Model, 'findOne').resolves(carMockWithId)
-    sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockWithId)
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockChangeWithId)
     sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId)
   });
 
@@ -54,8 +54,8 @@ describe('Car Model', () => {
 
   describe('updating a car', () => {
 		it('successfully updated', async () => {
-			const carFound = await carModel.update('62cf1fc6498565d94eba52cd', carMock);
-			expect(carFound).to.be.deep.equal(carMockWithId);
+			const carUpdated = await carModel.update('62cf1fc6498565d94eba52cd', carMockChange);
+			expect(carUpdated).to.be.deep.equal(carMockChangeWithId);
 		});
 
 		it('_id not found', async () => {
@@ -69,8 +69,8 @@ describe('Car Model', () => {
 
 	describe('deleting a car', () => {
 		it('successfully deleted', async () => {
-			const carFound = await carModel.delete('62cf1fc6498565d9');
-			expect(carFound).to.be.deep.equal(carMockWithId);
+			const carDeleted = await carModel.delete(carMockWithId._id);
+			expect(carDeleted).to.be.deep.equal(carMockWithId);
 		});
 
 		it('_id not found', async () => {
