@@ -7,9 +7,9 @@ const MotorCycleZodSchema = VehicleZodSchema.extend({
     'Custom',
     'Trail',
   ]),
-  engineCapacity: z.number().lte(2500).int().positive(),
+  engineCapacity: z.number().int().positive().lte(2500),
 });
 
-type IMotorCycle = z.infer<typeof MotorCycleZodSchema>;
+export type IMotorcycle = z.infer<typeof MotorCycleZodSchema>;
 
-export { IMotorCycle, MotorCycleZodSchema };
+export { MotorCycleZodSchema };
